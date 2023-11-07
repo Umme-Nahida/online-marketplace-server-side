@@ -96,7 +96,7 @@ async function run() {
      const result = await bidProjectCollection.updateOne(query,updateBid)
      res.send(result)
   })
-  
+
   app.patch('/updateBidCompletStatus/:id',async(req,res)=>{
      const id = req.params.id;
      const query = {_id: new ObjectId(id)}
@@ -117,7 +117,6 @@ async function run() {
       res.send(result)
     })
 
-     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
