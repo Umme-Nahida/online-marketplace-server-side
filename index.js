@@ -63,11 +63,51 @@ async function run() {
       
    })
    
-  //  get the all add Bids Projects
-  // app.get('/allBidJob',async(req,res)=>{
-  //     const result = await bidProjectCollection.find({}).toArray()
-  //     res.send(result)
-  // })
+  // delet the bid jobs project 
+  app.delete('/bidJobs/:id',async(req,res)=>{
+     const id = req.params.id;
+     console.log(id)
+     const query = {_id: new ObjectId(id)};
+     const result = await bidProjectCollection.deleteOne(query)
+     res.send(result)
+  })
+
+  app.patch('/updateBidProgressStatus/:id',async(req,res)=>{
+     const id = req.params.id;
+     console.log(id)
+     const query = {_id: new ObjectId(id)}
+     const updateBid = {
+        $set: {
+           status: "progress"
+        }
+     }
+     const result = await bidProjectCollection.updateOne(query,updateBid)
+     res.send(result)
+  })
+
+  app.patch('/updateBidRejectStatus/:id',async(req,res)=>{
+     const id = req.params.id;
+     const query = {_id: new ObjectId(id)}
+     const updateBid = {
+        $set: {
+           status: 'cancelled'
+        }
+     }
+     const result = await bidProjectCollection.updateOne(query,updateBid)
+     res.send(result)
+  })
+  
+  app.patch('/updateBidCompletStatus/:id',async(req,res)=>{
+     const id = req.params.id;
+     const query = {_id: new ObjectId(id)}
+     const updateBid = {
+        $set: {
+           status: 'completed'
+        }
+     }
+     const result = await bidProjectCollection.updateOne(query,updateBid)
+     res.send(result)
+  })
 
     // create api for add bid job  on the database 
     app.post('/storeBidJobs',async(req,res)=>{
