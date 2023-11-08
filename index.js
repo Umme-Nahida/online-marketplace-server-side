@@ -41,13 +41,13 @@ async function run() {
          const options = { upsert: true };
          const update = {
             $set: {
-                  email: updateJob.email,
-                  jobTitle: updateJob.jobTitle,
-                  deadline: updateJob.deadline, 
-                  description: updateJob.description, 
-                  category: updateJob.category, 
-                  minPrice: updateJob.minPrice, 
-                  maxPrice: updateJob.maxPrice 
+               email: updateJob.email,
+               jobTitle: updateJob.jobTitle,
+               deadline: updateJob.deadline, 
+               description: updateJob.description, 
+               category: updateJob.category, 
+               minPrice: updateJob.minPrice, 
+               maxPrice: updateJob.maxPrice 
             }
          }
          const result = await jobCollections.updateOne(query,update,options)
