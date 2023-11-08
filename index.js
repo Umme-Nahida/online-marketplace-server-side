@@ -159,9 +159,6 @@ async function run() {
 }
 run().catch(console.dir);
 
-// create a api for insert the all jobs
-
-
 app.get('/', (req, res) => {
    res.send('assignment 11 server is running')
 })
