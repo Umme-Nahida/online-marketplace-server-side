@@ -32,10 +32,27 @@ async function run() {
       const bidProjectCollection = database.collection("bidProjectCollection");
 
       // update specific one posted job from the mongoDB jobCollection
-      app.put('/updatePostJob/:id',(req,res)=>{
+      app.put('/updatePostJob/:id',async(req,res)=>{
          const id = req.params.id;
-         console.log(id)
-         // const query = {_id: new ObjectId(id)}
+         console.log('this update id', id)
+         const query = {_id: new ObjectId(id)}
+         const updateJob = req.body;
+         console.log(updateJob)
+         const options = { upsert: true };
+         const update = {
+            $set: {
+                  email: updateJob.email,
+                  jobTitle: updateJob.jobTitle,
+                  deadline: updateJob.deadline, 
+                  description: updateJob.description, 
+                  category: updateJob.category, 
+                  minPrice: updateJob.minPrice, 
+                  maxPrice: updateJob.maxPrice 
+            }
+         }
+         const result = await jobCollections.updateOne(query,update,options)
+         res.send(result)
+         
       
       })
        //  delete the job from my posted job page and jobCollectionDB
