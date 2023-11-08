@@ -31,11 +31,12 @@ async function run() {
       const jobCollections = database.collection("jobCollection");
       const bidProjectCollection = database.collection("bidProjectCollection");
 
-
+      // update specific one posted job from the mongoDB jobCollection
       app.put('/updatePostJob/:id',(req,res)=>{
          const id = req.params.id;
-         const query = {_id: new ObjectId(id)}
-         const 
+         console.log(id)
+         // const query = {_id: new ObjectId(id)}
+      
       })
        //  delete the job from my posted job page and jobCollectionDB
        app.delete('/myPostedJobDelet/:id', async (req, res) => {
@@ -48,9 +49,9 @@ async function run() {
       app.get('/jobDetails/:id', async (req, res) => {
          const id = req.params.id;
          console.log(id)
-         // const query = { _id: new ObjectId(id) }
-         // const result = await jobCollections.findOne(query)
-         // res.send(result)
+         const query = { _id: new ObjectId(id) }
+         const result = await jobCollections.findOne(query)
+         res.send(result)
       })
       //  get the allJobs from mongoDB jobCollections
       app.get('/alljobs', async (req, res) => {
