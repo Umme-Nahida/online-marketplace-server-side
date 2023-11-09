@@ -1,4 +1,6 @@
 const express = require('express')
+const jwt = require('jsonwebtoken')
+var cookieParser = require('cookie-parser')
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app = express()
 require('dotenv').config()
@@ -6,11 +8,27 @@ const cors = require('cors')
 const port = process.env.PORT || 5000;
 
 
-app.use(cors())
+app.use(cors({
+   origin:['http://localhost:5173'],
+   credentials:true
+}))
 app.use(express.json())
+app.use(cookieParser())
 
-console.log(process.env.DB_PASS)
-console.log(process.env.DB_USER)
+// const logger = async(req,res,next)=>{
+//    console.log( 'calls',req.host, req.originalUrl)
+//    next()
+// }
+
+// const VarifyToken = async(req,res,next)=>{
+//    const token = req.cookies.cookieName;
+//    console.log(token)
+//    if(!token){
+//       return res.status(401).send({message:'UnAuthrized Access'})
+//    }
+//    next()
+  
+// }
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.jeh0ui5.mongodb.net/?retryWrites=true&w=majority`;
 
@@ -31,6 +49,25 @@ async function run() {
       const jobCollections = database.collection("jobCollection");
       const bidProjectCollection = database.collection("bidProjectCollection");
 
+
+
+      app.get('/sortingBid',async(req,res)=>{
+           let query = {};
+           const resutl = await bidProjectCollection.find(query).sort({status: -1}).toArray()
+           res.send(resutl)
+      })
+   //   create a secret key 
+      app.post('/jwt',async(req,res)=>{
+           const user = req.body;
+           console.log(user,"thsi is my jwt access user")
+           const token = jwt.sign(user,process.env.ACCESS_TOKEN_SECRET,{expiresIn: '48h'})
+           res
+           .cookie('cookieName', token,{
+            httpOnly: true,
+            secure:false
+           } )
+           .send(token)
+      })
       // update specific one posted job from the mongoDB jobCollection
       app.put('/updatePostJob/:id',async(req,res)=>{
          const id = req.params.id;
